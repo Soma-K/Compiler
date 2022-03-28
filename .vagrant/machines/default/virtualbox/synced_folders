@@ -1,0 +1,1 @@
+{"rsync":{"/vagrant":{"type":"rsync","rsync__exclude":".git/","guestpath":"/vagrant","hostpath":"C:/Users/jocke/OneDrive/Dokument/Imperial/IAC/Compilers/langproc-2021-cw-master","disabled":false,"__vagrantfile":true,"exclude":".git/","owner":"vagrant","group":"vagrant"}}}

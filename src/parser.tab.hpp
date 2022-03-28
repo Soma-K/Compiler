@@ -68,11 +68,15 @@ extern int yydebug;
     T_EXPONENT = 262,
     T_LBRACKET = 263,
     T_RBRACKET = 264,
-    T_LOG = 265,
-    T_EXP = 266,
-    T_SQRT = 267,
-    T_NUMBER = 268,
-    T_VARIABLE = 269
+    T_L_CURLY_BRACKET = 265,
+    T_R_CURLY_BRACKET = 266,
+    T_LOG = 267,
+    T_EXP = 268,
+    T_SQRT = 269,
+    T_NUMBER = 270,
+    T_VARIABLE = 271,
+    T_INT = 272,
+    T_IDENTIFIER = 273
   };
 #endif
 
@@ -86,8 +90,9 @@ union YYSTYPE
   const Expression *expr;
   double number;
   std::string *string;
+  const Expression *node;
 
-#line 91 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 96 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

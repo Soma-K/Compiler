@@ -18,16 +18,21 @@
   const Expression *expr;
   double number;
   std::string *string;
+  const Expression *node;
 }
 
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
-%token T_LBRACKET T_RBRACKET
+%token T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
 %token T_LOG T_EXP T_SQRT
 %token T_NUMBER T_VARIABLE
+%token T_INT
+%token T_IDENTIFIER
+
 
 %type <expr> EXPR TERM UNARY FACTOR
 %type <number> T_NUMBER
-%type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME
+%type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME T_IDENTIFIER
+%type <node> FUNCTION_DECLARATION
 
 %start ROOT
 
@@ -82,6 +87,9 @@ FACTOR : T_NUMBER     { /* TODO-1 : uncomment this:   $$ = new Number( $1 ); */ 
 FUNCTION_NAME : T_LOG { $$ = new std::string("log"); }
               | T_EXP { $$ = new std::string("exp"); }
               | T_SQRT { $$ = new std::string("sqrt"); }
+
+
+FUNCTION_DECLARATION : T_INT T_IDENTIFIER T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET { $$ = new Function_Declaration( $2 ); }
 
 %%
 

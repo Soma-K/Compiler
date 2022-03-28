@@ -5,6 +5,30 @@
 
 #include <cmath>
 
+class Function_Declaration : public Expression {
+protected:
+
+std::string id;
+
+
+public:
+Function_Declaration(const std::string &_id){
+id = _id;
+
+//_name = "FUNCTION_DECLARATION";
+}
+
+const std::string getId() const {
+return id;
+}
+
+virtual void print(std::ostream &dst,std::string f_name,std::string destReg, std::string start_label, std::string end_label) const  {
+    
+
+}
+
+};
+
 class Function
     : public Expression
 {
