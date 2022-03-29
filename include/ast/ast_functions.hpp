@@ -5,13 +5,13 @@
 
 #include <cmath>
 
-class Functiondeclaration
+class FUNCTIONDECLERATION
     : public Expression
 {
 private:
     std::string id;
 public:
-    Functiondeclaration(const std::string &_id)
+    FUNCTIONDECLERATION(const std::string &_id)
         : id(_id)
     {}
 
