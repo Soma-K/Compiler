@@ -69,7 +69,7 @@ BITWISEAND : BITWISEAND T_BITWISEAND LOGICEQ { $$ = new BitwiseAndOperator ( $1 
 
 LOGICEQ : LOGICEQ T_EQUALS LOGICREL { $$ = new EqOperator ( $1 , $3);} 
         | LOGICEQ T_NOTEQUALS LOGICREL { $$ = new NotEqOperator ($1, $3);}
-        | BITWISEXOR { $$ = $1; }
+        | LOGICREL { $$ = $1; }
 
 LOGICREL :LOGICREL T_GREATERTHAN BITWISESHIFT { $$ = new GreaterThanOperator ( $1 , $3);} 
         | LOGICREL T_LESSTHAN BITWISESHIFT { $$ = new LessThanOperator ( $1 , $3);} 
