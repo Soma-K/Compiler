@@ -76,7 +76,15 @@ extern int yydebug;
     T_NUMBER = 270,
     T_VARIABLE = 271,
     T_INT = 272,
-    T_IDENTIFIER = 273
+    T_IDENTIFIER = 273,
+    T_TYPE_VOID = 274,
+    T_TYPE_CHAR = 275,
+    T_TYPE_INT = 276,
+    T_TYPE_LONG = 277,
+    T_TYPE_FLOAT = 278,
+    T_TYPE_DOUBLE = 279,
+    T_TYPE_SIGNED = 280,
+    T_TYPE_UNSIGNED = 281
   };
 #endif
 
@@ -92,7 +100,7 @@ union YYSTYPE
   std::string *string;
   const Expression *node;
 
-#line 96 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 104 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

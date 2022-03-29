@@ -9,11 +9,19 @@ Terminals unused in grammar
    T_R_CURLY_BRACKET
    T_INT
    T_IDENTIFIER
+   T_TYPE_VOID
+   T_TYPE_CHAR
+   T_TYPE_INT
+   T_TYPE_LONG
+   T_TYPE_FLOAT
+   T_TYPE_DOUBLE
+   T_TYPE_SIGNED
+   T_TYPE_UNSIGNED
 
 
 Rules useless in grammar
 
-   18 FUNCTION_DECLARATION: T_INT T_IDENTIFIER T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
+   18 FUNCTION_DECLARATION: T_TYPE_INT T_IDENTIFIER T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
 
 
 Grammar
@@ -64,23 +72,31 @@ T_NUMBER (270) 11
 T_VARIABLE (271) 12
 T_INT (272)
 T_IDENTIFIER (273)
+T_TYPE_VOID (274)
+T_TYPE_CHAR (275)
+T_TYPE_INT (276)
+T_TYPE_LONG (277)
+T_TYPE_FLOAT (278)
+T_TYPE_DOUBLE (279)
+T_TYPE_SIGNED (280)
+T_TYPE_UNSIGNED (281)
 
 
 Nonterminals, with rules where they appear
 
-$accept (19)
+$accept (27)
     on left: 0
-ROOT (20)
+ROOT (28)
     on left: 1, on right: 0
-EXPR (21)
+EXPR (29)
     on left: 2 3 4, on right: 1 2 3 13 14
-TERM (22)
+TERM (30)
     on left: 5 6 7, on right: 2 3 4 5 6
-UNARY (23)
+UNARY (31)
     on left: 8 9 10, on right: 5 6 7 9
-FACTOR (24)
+FACTOR (32)
     on left: 11 12 13 14, on right: 8 9 10
-FUNCTION_NAME (25)
+FUNCTION_NAME (33)
     on left: 15 16 17, on right: 14
 
 

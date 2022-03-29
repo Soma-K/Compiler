@@ -5,28 +5,32 @@
 
 #include <cmath>
 
-class Function_Declaration : public Expression {
-protected:
-
-std::string id;
-
-
+class Functiondeclaration
+    : public Expression
+{
+private:
+    std::string id;
 public:
-Function_Declaration(const std::string &_id){
-id = _id;
+    Functiondeclaration(const std::string &_id)
+        : id(_id)
+    {}
 
-//_name = "FUNCTION_DECLARATION";
-}
+    const std::string getId() const
+    { return id; }
 
-const std::string getId() const {
-return id;
-}
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<id;
+    }
 
-virtual void print(std::ostream &dst,std::string f_name,std::string destReg, std::string start_label, std::string end_label) const  {
-    f_name->print(dst);
-
-}
-
+    virtual double evaluate(
+        const std::map<std::string,double> &bindings
+    ) const override
+    {
+        // TODO-B : Run bin/eval_expr with a variable binding to make sure you understand how this works.
+        // If the binding does not exist, this will throw an error
+        return bindings.at(id);
+    }    
 };
 
 class Function
