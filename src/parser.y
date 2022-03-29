@@ -3,17 +3,12 @@
 
   #include <cassert>
 
-  extern const Expression *g_root; // A way of getting the AST out
-
-  //! This is to fix problems when generating C++
-  // We are declaring the functions provided by Flex, so
-  // that Bison generated code can call them.
+  extern const Expression *g_root; 
   int yylex(void);
   void yyerror(const char *);
 }
 
-// Represents the value associated with any kind of
-// AST node.
+
 %union{
   const Expression *expr;
   double number;
@@ -49,12 +44,6 @@
 
 %%
 
-/* The TODO notes a are just a guide, and are non-exhaustive.
-   The expectation is that you do each one, then compile and test.
-   Testing should be done using patterns that target the specific
-   feature; the testbench is there to make sure that you haven't
-   broken anything while you added it.
-*/
 
 ROOT : FUNCTION_DECLARATION{ g_root = $1; }
 
@@ -130,17 +119,6 @@ FACTOR : T_NUMBER     { $$ = new Number( $1 );  }
 FUNCTION_NAME : T_LOG { $$ = new std::string("log"); }
               | T_EXP { $$ = new std::string("exp"); }
               | T_SQRT { $$ = new std::string("sqrt"); }
-
-
-//FUNCTION_DECLARATION :	T_TYPE_INT T_IDENTIFIER T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET									{ $$ = new Functiondeclaration(*$2); }
-
-//parameter_list					:	parameter_declaration				     							
-//{ $$ = new std::vector<Declaration*>(1, $1); } |	parameter_list T_COMMA parameter_declaration 		{ $1->push_back($3); $$ = $1; }		| 	{ $$ = NULL; }
-
-//parameter_declaration			:	TYPE declarator { $$ = new Declaration(*$1, new std::vector<Declarator*>(1, $2)); }
-
-
-
 
 %%
 
