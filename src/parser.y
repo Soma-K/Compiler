@@ -67,14 +67,14 @@ BITWISEXOR : BITWISEXOR T_BITWISEXOR BITWISEAND { $$ = new BitwiseXorOperator ( 
 BITWISEAND : BITWISEAND T_BITWISEAND LOGICEQ { $$ = new BitwiseAndOperator ( $1 , $3);} 
            | T_LOGICEQ { $$ = $1; }
 
-LOGICEQ : LOGICREL T_EQUALS LOGICREL { $$ = new EqOperator ( $1 , $3);} 
-        | LOGICREL T_NOTEQUALS LOGICREL { $$ = new NotEqOperator ($1, $3);}
+LOGICEQ : LOGICEQ T_EQUALS LOGICREL { $$ = new EqOperator ( $1 , $3);} 
+        | LOGICEQ T_NOTEQUALS LOGICREL { $$ = new NotEqOperator ($1, $3);}
         | BITWISEXOR { $$ = $1; }
 
-LOGICREL :LOGICEQ T_GREATERTHAN BITWISESHIFT { $$ = new GreaterThanOperator ( $1 , $3);} 
-        | LOGICEQ T_LESSTHAN BITWISESHIFT { $$ = new LessThanOperator ( $1 , $3);} 
-        | LOGICEQ T_GREATERTHANEQUALS BITWISESHIFT { $$ = new GreaterThanEqOperator ( $1 , $3);} 
-        | LOGICEQ T_LESSTHANEQUALS BITWISESHIFT { $$ = new LessThanEqOperator ( $1 , $3);} 
+LOGICREL :LOGICREL T_GREATERTHAN BITWISESHIFT { $$ = new GreaterThanOperator ( $1 , $3);} 
+        | LOGICREL T_LESSTHAN BITWISESHIFT { $$ = new LessThanOperator ( $1 , $3);} 
+        | LOGICREL T_GREATERTHANEQUALS BITWISESHIFT { $$ = new GreaterThanEqOperator ( $1 , $3);} 
+        | LOGICREL T_LESSTHANEQUALS BITWISESHIFT { $$ = new LessThanEqOperator ( $1 , $3);} 
         | BITWISESHIFT { $$ = $1; }
 
 
