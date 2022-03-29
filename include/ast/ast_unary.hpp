@@ -49,12 +49,93 @@ public:
         const std::map<std::string, double> &bindings
     ) const override
     {
-        // TODO-F: Implement this similar to how AddOperator was implemented.
-        //throw std::runtime_error("NegOperator::evaluate is not implemented.");
         double vl=-getExpr()->evaluate(bindings);
        
         return vl;
     }
 };
+
+class IncrementOperator
+    : public Unary
+{
+public:
+    IncrementOperator(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "++"; }
+
+    virtual double evaluate(
+        const std::map<std::string, double> &bindings
+    ) const override
+    {
+        double vl=(getExpr()+1)->evaluate(bindings);
+        return vl;
+    }
+};
+
+class DecrementOperator
+    : public Unary
+{
+public:
+    IncrementOperator(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "--"; }
+
+    virtual double evaluate(
+        const std::map<std::string, double> &bindings
+    ) const override
+    {
+        double vl=(getExpr()-1)->evaluate(bindings);
+        return vl;
+    }
+};
+
+class BitwiseFlipOperator
+    : public Unary
+{
+public:
+    BitwiseFlipOperator(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "~"; }
+
+    virtual double evaluate(
+        const std::map<std::string, double> &bindings
+    ) const override
+    {
+        double vl=~getExpr()->evaluate(bindings);
+        return vl;
+    }
+};
+
+class NotOperator
+    : public Unary
+{
+public:
+    NotOperator(const ExpressionPtr _expr)
+        : Unary(_expr)
+    {}
+
+    virtual const char *getOpcode() const override
+    { return "!"; }
+
+    virtual double evaluate(
+        const std::map<std::string, double> &bindings
+    ) const override
+    {
+        double vl=!getExpr()->evaluate(bindings);
+        return vl;
+    }
+};
+
+
+
 
 #endif
