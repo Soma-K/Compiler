@@ -23,7 +23,7 @@ return id;
 }
 
 virtual void print(std::ostream &dst,std::string f_name,std::string destReg, std::string start_label, std::string end_label) const  {
-    
+    f_name->print(dst);
 
 }
 
