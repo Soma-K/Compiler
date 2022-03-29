@@ -2,16 +2,16 @@
 #define ast_functions_hpp
 
 #include "ast_expression.hpp"
-
+#include <string>
 #include <cmath>
 
-class FUNCTIONDECLERATION
+class Functiondeclaration
     : public Expression
 {
 private:
     std::string id;
 public:
-    FUNCTIONDECLERATION(const std::string &_id)
+    Functiondeclaration(const std::string &_id)
         : id(_id)
     {}
 
@@ -20,7 +20,15 @@ public:
 
     virtual void print(std::ostream &dst) const override
     {
-        dst<<id;
+        dst<<".global "<<id<<std::endl;
+        dst<<id<<":"<<std::endl;
+        
+        dst<<"addiu   $sp,$sp,-8"<<std::endl;
+        dst<<"sw      $fp,-4($sp)"<<std::endl;
+        
+        dst<<"move    $fp,$sp"<<std::endl;
+       
+        
     }
 
     virtual double evaluate(

@@ -66,25 +66,43 @@ extern int yydebug;
     T_PLUS = 260,
     T_MINUS = 261,
     T_EXPONENT = 262,
-    T_LBRACKET = 263,
-    T_RBRACKET = 264,
-    T_L_CURLY_BRACKET = 265,
-    T_R_CURLY_BRACKET = 266,
-    T_LOG = 267,
-    T_EXP = 268,
-    T_SQRT = 269,
-    T_NUMBER = 270,
-    T_VARIABLE = 271,
-    T_INT = 272,
-    T_IDENTIFIER = 273,
-    T_TYPE_VOID = 274,
-    T_TYPE_CHAR = 275,
-    T_TYPE_INT = 276,
-    T_TYPE_LONG = 277,
-    T_TYPE_FLOAT = 278,
-    T_TYPE_DOUBLE = 279,
-    T_TYPE_SIGNED = 280,
-    T_TYPE_UNSIGNED = 281
+    T_MOD = 263,
+    T_INCREMENT = 264,
+    T_DECREMENT = 265,
+    T_EQUALS = 266,
+    T_NOTEQUALS = 267,
+    T_LESSTHAN = 268,
+    T_GREATERTHAN = 269,
+    T_LESSTHANEQUALS = 270,
+    T_GREATERTHANEQUALS = 271,
+    T_AND = 272,
+    T_NOT = 273,
+    T_OR = 274,
+    T_BITWISEAND = 275,
+    T_BITWISEOR = 276,
+    T_BITWISEXOR = 277,
+    T_BITWISEFLIP = 278,
+    T_SHIFTLEFT = 279,
+    T_SHIFTRIGHT = 280,
+    T_LBRACKET = 281,
+    T_RBRACKET = 282,
+    T_L_CURLY_BRACKET = 283,
+    T_R_CURLY_BRACKET = 284,
+    T_LOG = 285,
+    T_EXP = 286,
+    T_SQRT = 287,
+    T_NUMBER = 288,
+    T_VARIABLE = 289,
+    T_INT = 290,
+    T_IDENTIFIER = 291,
+    T_TYPE_VOID = 292,
+    T_TYPE_CHAR = 293,
+    T_TYPE_INT = 294,
+    T_TYPE_LONG = 295,
+    T_TYPE_FLOAT = 296,
+    T_TYPE_DOUBLE = 297,
+    T_TYPE_SIGNED = 298,
+    T_TYPE_UNSIGNED = 299
   };
 #endif
 
@@ -100,7 +118,7 @@ union YYSTYPE
   std::string *string;
   const Expression *node;
 
-#line 104 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 122 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -48,10 +48,10 @@ extern "C" int fileno(FILE *stream);
 
 [&]             { return T_BITWISEAND; }
 [|]             { return T_BITWISEOR; }
+
 [~]             { return T_BITWISEFLIP; }
 [<][<]            { return T_SHIFTLEFT; }
 [>][>]            { return T_SHIFTRIGHT; }
-
 
 
 log             { return T_LOG; }
@@ -73,7 +73,7 @@ sqrt            { return T_SQRT; }
 
 [ \t\r\n]+		{;}
 
-[a-zA-Z_][a-zA-Z0-9_]*      { yylval.string = new std::string(yytext); return (T_IDENTIFIER); }
+[a-z]+      { yylval.string = new std::string(yytext); return (T_IDENTIFIER); }
 
 .               { fprintf(stderr, "Invalid token\n"); exit(1); }
 %%

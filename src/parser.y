@@ -38,7 +38,7 @@
 %type <expr> EXPR TERM UNARY FACTOR
 %type <number> T_NUMBER
 %type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME T_IDENTIFIER T_TYPE_VOID T_TYPE_CHAR T_TYPE_INT T_TYPE_LONG T_TYPE_FLOAT T_TYPE_DOUBLE T_TYPE_SIGNED T_TYPE_UNSIGNED
-%type <expr> FUNCTION_DECLARATION
+%type <string> FUNCTION_DECLARATION
 //%type <declaration_node> declaration parameter_declaration
 //%type <declaration_list_vector> declaration_list parameter_list
 
@@ -70,10 +70,10 @@ UNARY : T_MINUS FACTOR { $$ = new NegOperator ( $2 ); }
       | FACTOR T_EXPONENT UNARY      { $$ = new ExpOperator ( $1, $3 ); }
       | FACTOR         { $$ = $1; }
 
-/* TODO-2 : Add a rule for variable, base on the pattern of number. */
-FACTOR : T_NUMBER     { /* TODO-1 : uncomment this:   $$ = new Number( $1 ); */ $$ = new Number( $1 );  }
-       | T_VARIABLE {$$ = new Variable ( *$1 );}   
+
+FACTOR : T_NUMBER     { $$ = new Number( $1 );  }
        | T_LBRACKET EXPR T_RBRACKET { $$ = $2; }
+       | T_VARIABLE { $$ = new Functiondeclaration(*$1); }
        | FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET {
 
         if (*$1 == "log"){
@@ -96,7 +96,7 @@ FUNCTION_NAME : T_LOG { $$ = new std::string("log"); }
               | T_SQRT { $$ = new std::string("sqrt"); }
 
 
-FUNCTION_DECLARATION				:	T_TYPE_INT T_IDENTIFIER T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET									{ $$ = new Functiondeclaration(*$2); }
+//FUNCTION_DECLARATION :	T_TYPE_INT T_IDENTIFIER T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET									{ $$ = new Functiondeclaration(*$2); }
 
 //parameter_list					:	parameter_declaration				     							
 //{ $$ = new std::vector<Declaration*>(1, $1); } |	parameter_list T_COMMA parameter_declaration 		{ $1->push_back($3); $$ = $1; }		| 	{ $$ = NULL; }
