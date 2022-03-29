@@ -22,6 +22,10 @@
 }
 
 %token T_TIMES T_DIVIDE T_PLUS T_MINUS T_EXPONENT
+%token T_MOD T_INCREMENT T_DECREMENT
+%token T_EQUALS T_NOTEQUALS T_LESSTHAN T_GREATERTHAN T_LESSTHANEQUALS T_GREATERTHANEQUALS
+%token T_AND T_NOT T_OR
+%token T_BITWISEAND T_BITWISEOR T_BITWISEXOR T_BITWISEFLIP T_SHIFTLEFT T_SHIFTRIGHT
 %token T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
 %token T_LOG T_EXP T_SQRT
 %token T_NUMBER T_VARIABLE
@@ -54,18 +58,14 @@
 
 ROOT : EXPR { g_root = $1; }
 
-/* TODO-3 : Add support for (x + 6) and (10 - y). You'll need to add production rules, and create an AddOperator or
-            SubOperator. */
 EXPR : EXPR T_MINUS TERM   { $$ = new SubOperator ( $1 , $3); }
      | EXPR T_PLUS TERM   { $$ = new AddOperator ( $1 , $3); }
      | TERM { $$ = $1; }   
 
-/* TODO-4 : Add support (x * 6) and (z / 11). */
 TERM : TERM T_TIMES UNARY           { $$ = new MulOperator ( $1, $3 ); }
      | TERM T_DIVIDE UNARY         { $$ = new DivOperator ( $1, $3 ); }
      | UNARY  { $$ = $1; }  
 
-/*  TODO-5 : Add support for (- 5) and (- x). You'll need to add production rules for the unary minus operator and create a NegOperator. */
 UNARY : T_MINUS FACTOR { $$ = new NegOperator ( $2 ); } 
       | FACTOR T_EXPONENT UNARY      { $$ = new ExpOperator ( $1, $3 ); }
       | FACTOR         { $$ = $1; }
