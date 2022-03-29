@@ -56,7 +56,9 @@
    broken anything while you added it.
 */
 
-ROOT : EXPR { g_root = $1; }
+ROOT : FUNCTION_DECLARATION{ g_root = $1; }
+
+FUNCTION_DECLARATION : T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET EXPR T_R_CURLY_BRACKET { $$ = new Functiondeclaration(*$2); }
 
 EXPR : EXPR T_MINUS TERM   { $$ = new SubOperator ( $1 , $3); }
      | EXPR T_PLUS TERM   { $$ = new AddOperator ( $1 , $3); }
@@ -73,7 +75,6 @@ UNARY : T_MINUS FACTOR { $$ = new NegOperator ( $2 ); }
 
 FACTOR : T_NUMBER     { $$ = new Number( $1 );  }
        | T_LBRACKET EXPR T_RBRACKET { $$ = $2; }
-       | T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET { $$ = new Functiondeclaration(*$2); }
        | FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET {
 
         if (*$1 == "log"){
