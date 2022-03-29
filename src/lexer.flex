@@ -48,7 +48,6 @@ extern "C" int fileno(FILE *stream);
 
 [&]             { return T_BITWISEAND; }
 [|]             { return T_BITWISEOR; }
-[^]             { return T_BITWISEXOR; }
 [~]             { return T_BITWISEFLIP; }
 [<][<]            { return T_SHIFTLEFT; }
 [>][>]            { return T_SHIFTRIGHT; }
