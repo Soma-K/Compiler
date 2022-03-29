@@ -32,26 +32,26 @@ extern "C" int fileno(FILE *stream);
 [)]             { return T_RBRACKET; }
 
 [%]             { return T_MOD; }
-[++]            { return T_INCREMENT; }
-[--]            { return T_DECREMENT; }
+[+][+]            { return T_INCREMENT; }
+[-][-]            { return T_DECREMENT; }
 
-[==]            { return T_EQUALS; }
-[!=]            { return T_NOTEQUALS; }
+[=][=]            { return T_EQUALS; }
+[!][=]            { return T_NOTEQUALS; }
 [<]             { return T_LESSTHAN; }
 [>]             { return T_GREATERTHAN; }
-[>=]            { return T_GRETERTHANEQUALS; }
-[<=]            { return T_LESSTHANEQUALS; }
+[>][=]            { return T_GREATERTHANEQUALS; }
+[<][=]            { return T_LESSTHANEQUALS; }
 
-[&&]            { return T_AND; }
-[||]            { return T_OR; }
+[&][&]            { return T_AND; }
+[|][|]            { return T_OR; }
 [!]             { return T_NOT; }
 
 [&]             { return T_BITWISEAND; }
 [|]             { return T_BITWISEOR; }
 [^]             { return T_BITWISEXOR; }
 [~]             { return T_BITWISEFLIP; }
-[<<]            { return T_SHIFTLEFT; }
-[>>]            { return T_SHIFTRIGHT; }
+[<][<]            { return T_SHIFTLEFT; }
+[>][>]            { return T_SHIFTRIGHT; }
 
 
 
