@@ -33,13 +33,15 @@ public:
 
     virtual void print(std::ostream &dst) const override
     {
-        dst<<"( ";
-        left->print(dst);
-        dst<<" ";
+        
         dst<<getOpcode();
-        dst<<" ";
+        dst<<" t1, ";
+        left->print(dst);
+        dst<<", ";
         right->print(dst);
-        dst<<" )";
+        dst<<std::endl;
+        
+        
     }
 };
 
@@ -48,7 +50,7 @@ class AddOperator
 {
 protected:
     virtual const char *getOpcode() const override
-    { return "+"; }
+    { return "addiu"; }
 public:
     AddOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
@@ -69,7 +71,7 @@ class SubOperator
 {
 protected:
     virtual const char *getOpcode() const override
-    { return "-"; }
+    { return "sub"; }
 public:
     SubOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
@@ -139,14 +141,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl%vr;
-    }
+   
 };
 
 class LShiftOperator
@@ -160,14 +155,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl<<vr;
-    }
+    
 };
 
 class RShiftOperator
@@ -181,14 +169,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl>>vr;
-    }
+   
 };
 
 class LessThanOperator
@@ -219,7 +200,7 @@ protected:
     virtual const char *getOpcode() const override
     { return "<="; }
 public:
-    LesThanEqOperator(ExpressionPtr _left, ExpressionPtr _right)
+    LessThanEqOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
 
@@ -244,14 +225,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl.vr;
-    }
+   
 };
 
 class GreaterThanEqOperator
@@ -261,7 +235,7 @@ protected:
     virtual const char *getOpcode() const override
     { return ">="; }
 public:
-    DivOperator(ExpressionPtr _left, ExpressionPtr _right)
+    GreaterThanEqOperator(ExpressionPtr _left, ExpressionPtr _right)
         : Operator(_left, _right)
     {}
 
@@ -328,14 +302,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl&vr;
-    }
+   
 };
 
 class BitwiseXorOperator
@@ -349,14 +316,6 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl^vr;
-    }
 };
 
 class BitwiseOrOperator
@@ -370,14 +329,7 @@ public:
         : Operator(_left, _right)
     {}
 
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return vl|vr;
-    }
+    
 };
 
 class AndOperator

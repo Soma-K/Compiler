@@ -20,11 +20,14 @@ extern "C" int fileno(FILE *stream);
 "unsigned"         { return T_TYPE_UNSIGNED; }
 
 
+"return"        { return T_RETURN; }
+
+
 
 
 [*]             { return T_TIMES; }
 [+]             { return T_PLUS; }
-[\^]            { return T_BITWISEXOR; }
+[\^]            { return T_EXPONENT; }
 [-]             { return T_MINUS; }
 [/]             { return T_DIVIDE; }
 
@@ -52,7 +55,7 @@ extern "C" int fileno(FILE *stream);
 [~]             { return T_BITWISEFLIP; }
 [<][<]            { return T_SHIFTLEFT; }
 [>][>]            { return T_SHIFTRIGHT; }
-
+[,]               { return T_COMMA; }
 
 log             { return T_LOG; }
 exp             { return T_EXP; }
@@ -71,11 +74,10 @@ sqrt            { return T_SQRT; }
 [0-9]+([.][0-9]*)? { yylval.number=strtod(yytext, 0); return T_NUMBER; }
 [a-zA-Z_][a-zA-Z0-9_]*          { yylval.string=new std::string(yytext); return T_VARIABLE; }
 
-[ \t\r\n]+		{;}
 
-[a-z]+      { yylval.string = new std::string(yytext); return (T_IDENTIFIER); }
 
-.               { fprintf(stderr, "Invalid token\n"); exit(1); }
+
+.               {}
 %%
 
 void yyerror (char const *s)

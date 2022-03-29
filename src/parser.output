@@ -1,30 +1,9 @@
-Nonterminals useless in grammar
-
-   FUNCTION_DECLARATION
-
-
 Terminals unused in grammar
 
-   T_MOD
-   T_INCREMENT
-   T_DECREMENT
-   T_EQUALS
-   T_NOTEQUALS
-   T_LESSTHAN
-   T_GREATERTHAN
-   T_LESSTHANEQUALS
-   T_GREATERTHANEQUALS
-   T_AND
-   T_NOT
-   T_OR
-   T_BITWISEAND
-   T_BITWISEOR
-   T_BITWISEXOR
-   T_BITWISEFLIP
-   T_SHIFTLEFT
-   T_SHIFTRIGHT
+   T_EXPONENT
    T_INT
    T_IDENTIFIER
+   T_SEMICOLON
    T_TYPE_VOID
    T_TYPE_CHAR
    T_TYPE_LONG
@@ -34,475 +13,1335 @@ Terminals unused in grammar
    T_TYPE_UNSIGNED
 
 
+State 77 conflicts: 4 reduce/reduce
+State 78 conflicts: 4 reduce/reduce
+
+
 Grammar
 
     0 $accept: ROOT $end
 
-    1 ROOT: EXPR
+    1 ROOT: FUNCTION_DECLARATION
 
-    2 EXPR: EXPR T_MINUS TERM
-    3     | EXPR T_PLUS TERM
-    4     | TERM
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE T_LBRACKET PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET
 
-    5 TERM: TERM T_TIMES UNARY
-    6     | TERM T_DIVIDE UNARY
-    7     | UNARY
+    3 PARAMETERLIST: T_TYPE_INT T_VARIABLE
+    4              | T_TYPE_INT T_VARIABLE T_COMMA PARAMETERLIST
+    5              | %empty
 
-    8 UNARY: T_MINUS FACTOR
-    9      | FACTOR T_EXPONENT UNARY
-   10      | FACTOR
+    6 RETURN: T_RETURN LOGICOR
+    7       | LOGICOR
 
-   11 FACTOR: T_NUMBER
-   12       | T_LBRACKET EXPR T_RBRACKET
-   13       | T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
-   14       | FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET
+    8 LOGICOR: LOGICOR T_OR LOGICAND
+    9        | LOGICAND
 
-   15 FUNCTION_NAME: T_LOG
-   16              | T_EXP
-   17              | T_SQRT
+   10 LOGICAND: LOGICAND T_AND BITWISEOR
+   11         | BITWISEOR
+
+   12 BITWISEOR: BITWISEOR T_BITWISEOR BITWISEXOR
+   13          | BITWISEXOR
+
+   14 BITWISEXOR: BITWISEXOR T_BITWISEXOR BITWISEAND
+   15           | BITWISEAND
+
+   16 BITWISEAND: BITWISEAND T_BITWISEAND LOGICEQ
+   17           | LOGICEQ
+
+   18 LOGICEQ: LOGICREL T_EQUALS LOGICREL
+   19        | LOGICREL T_NOTEQUALS LOGICREL
+   20        | LOGICREL
+
+   21 LOGICREL: LOGICEQ T_GREATERTHAN BITWISESHIFT
+   22         | LOGICEQ T_LESSTHAN BITWISESHIFT
+   23         | LOGICEQ T_GREATERTHANEQUALS BITWISESHIFT
+   24         | LOGICEQ T_LESSTHANEQUALS BITWISESHIFT
+   25         | BITWISESHIFT
+
+   26 BITWISESHIFT: BITWISESHIFT T_SHIFTLEFT EXPR
+   27             | BITWISESHIFT T_SHIFTRIGHT EXPR
+   28             | EXPR
+
+   29 EXPR: EXPR T_MINUS TERM
+   30     | EXPR T_PLUS TERM
+   31     | TERM
+
+   32 TERM: TERM T_TIMES UNARY
+   33     | TERM T_DIVIDE UNARY
+   34     | TERM T_MOD UNARY
+   35     | UNARY
+
+   36 UNARY: T_MINUS FACTOR
+   37      | FACTOR T_INCREMENT
+   38      | FACTOR T_DECREMENT
+   39      | T_BITWISEFLIP FACTOR
+   40      | T_NOT FACTOR
+   41      | FACTOR
+
+   42 FACTOR: T_NUMBER
+   43       | T_LBRACKET EXPR T_RBRACKET
+   44       | T_TYPE_INT T_VARIABLE
+   45       | FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET
+
+   46 FUNCTION_NAME: T_LOG
+   47              | T_EXP
+   48              | T_SQRT
 
 
 Terminals, with rules where they appear
 
 $end (0) 0
 error (256)
-T_TIMES (258) 5
-T_DIVIDE (259) 6
-T_PLUS (260) 3
-T_MINUS (261) 2 8
-T_EXPONENT (262) 9
-T_MOD (263)
-T_INCREMENT (264)
-T_DECREMENT (265)
-T_EQUALS (266)
-T_NOTEQUALS (267)
-T_LESSTHAN (268)
-T_GREATERTHAN (269)
-T_LESSTHANEQUALS (270)
-T_GREATERTHANEQUALS (271)
-T_AND (272)
-T_NOT (273)
-T_OR (274)
-T_BITWISEAND (275)
-T_BITWISEOR (276)
-T_BITWISEXOR (277)
-T_BITWISEFLIP (278)
-T_SHIFTLEFT (279)
-T_SHIFTRIGHT (280)
-T_LBRACKET (281) 12 13 14
-T_RBRACKET (282) 12 13 14
-T_L_CURLY_BRACKET (283) 13
-T_R_CURLY_BRACKET (284) 13
-T_LOG (285) 15
-T_EXP (286) 16
-T_SQRT (287) 17
-T_NUMBER (288) 11
-T_VARIABLE (289) 13
+T_TIMES (258) 32
+T_DIVIDE (259) 33
+T_PLUS (260) 30
+T_MINUS (261) 29 36
+T_EXPONENT (262)
+T_MOD (263) 34
+T_INCREMENT (264) 37
+T_DECREMENT (265) 38
+T_EQUALS (266) 18
+T_NOTEQUALS (267) 19
+T_LESSTHAN (268) 22
+T_GREATERTHAN (269) 21
+T_LESSTHANEQUALS (270) 24
+T_GREATERTHANEQUALS (271) 23
+T_AND (272) 10
+T_NOT (273) 40
+T_OR (274) 8
+T_BITWISEAND (275) 16
+T_BITWISEOR (276) 12
+T_BITWISEXOR (277) 14
+T_BITWISEFLIP (278) 39
+T_SHIFTLEFT (279) 26
+T_SHIFTRIGHT (280) 27
+T_LBRACKET (281) 2 43 45
+T_RBRACKET (282) 2 43 45
+T_L_CURLY_BRACKET (283) 2
+T_R_CURLY_BRACKET (284) 2
+T_LOG (285) 46
+T_EXP (286) 47
+T_SQRT (287) 48
+T_NUMBER (288) 42
+T_VARIABLE (289) 2 3 4 44
 T_INT (290)
 T_IDENTIFIER (291)
-T_TYPE_VOID (292)
-T_TYPE_CHAR (293)
-T_TYPE_INT (294) 13
-T_TYPE_LONG (295)
-T_TYPE_FLOAT (296)
-T_TYPE_DOUBLE (297)
-T_TYPE_SIGNED (298)
-T_TYPE_UNSIGNED (299)
+T_RETURN (292) 6
+T_SEMICOLON (293)
+T_COMMA (294) 4
+T_TYPE_VOID (295)
+T_TYPE_CHAR (296)
+T_TYPE_INT (297) 2 3 4 44
+T_TYPE_LONG (298)
+T_TYPE_FLOAT (299)
+T_TYPE_DOUBLE (300)
+T_TYPE_SIGNED (301)
+T_TYPE_UNSIGNED (302)
 
 
 Nonterminals, with rules where they appear
 
-$accept (45)
+$accept (48)
     on left: 0
-ROOT (46)
+ROOT (49)
     on left: 1, on right: 0
-EXPR (47)
-    on left: 2 3 4, on right: 1 2 3 12 14
-TERM (48)
-    on left: 5 6 7, on right: 2 3 4 5 6
-UNARY (49)
-    on left: 8 9 10, on right: 5 6 7 9
-FACTOR (50)
-    on left: 11 12 13 14, on right: 8 9 10
-FUNCTION_NAME (51)
-    on left: 15 16 17, on right: 14
+FUNCTION_DECLARATION (50)
+    on left: 2, on right: 1
+PARAMETERLIST (51)
+    on left: 3 4 5, on right: 2 4
+RETURN (52)
+    on left: 6 7, on right: 2
+LOGICOR (53)
+    on left: 8 9, on right: 6 7 8
+LOGICAND (54)
+    on left: 10 11, on right: 8 9 10
+BITWISEOR (55)
+    on left: 12 13, on right: 10 11 12
+BITWISEXOR (56)
+    on left: 14 15, on right: 12 13 14
+BITWISEAND (57)
+    on left: 16 17, on right: 14 15 16
+LOGICEQ (58)
+    on left: 18 19 20, on right: 16 17 21 22 23 24
+LOGICREL (59)
+    on left: 21 22 23 24 25, on right: 18 19 20
+BITWISESHIFT (60)
+    on left: 26 27 28, on right: 21 22 23 24 25 26 27
+EXPR (61)
+    on left: 29 30 31, on right: 26 27 28 29 30 43 45
+TERM (62)
+    on left: 32 33 34 35, on right: 29 30 31 32 33 34
+UNARY (63)
+    on left: 36 37 38 39 40 41, on right: 32 33 34 35
+FACTOR (64)
+    on left: 42 43 44 45, on right: 36 37 38 39 40 41
+FUNCTION_NAME (65)
+    on left: 46 47 48, on right: 45
 
 
 State 0
 
     0 $accept: . ROOT $end
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 1
 
-    ROOT           go to state 8
-    EXPR           go to state 9
-    TERM           go to state 10
-    UNARY          go to state 11
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    ROOT                  go to state 2
+    FUNCTION_DECLARATION  go to state 3
 
 
 State 1
 
-    8 UNARY: T_MINUS . FACTOR
+    2 FUNCTION_DECLARATION: T_TYPE_INT . T_VARIABLE T_LBRACKET PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET
 
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
-
-    FACTOR         go to state 14
-    FUNCTION_NAME  go to state 13
+    T_VARIABLE  shift, and go to state 4
 
 
 State 2
 
-   12 FACTOR: T_LBRACKET . EXPR T_RBRACKET
+    0 $accept: ROOT . $end
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
-
-    EXPR           go to state 15
-    TERM           go to state 10
-    UNARY          go to state 11
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    $end  shift, and go to state 5
 
 
 State 3
 
-   15 FUNCTION_NAME: T_LOG .
-
-    $default  reduce using rule 15 (FUNCTION_NAME)
-
-
-State 4
-
-   16 FUNCTION_NAME: T_EXP .
-
-    $default  reduce using rule 16 (FUNCTION_NAME)
-
-
-State 5
-
-   17 FUNCTION_NAME: T_SQRT .
-
-    $default  reduce using rule 17 (FUNCTION_NAME)
-
-
-State 6
-
-   11 FACTOR: T_NUMBER .
-
-    $default  reduce using rule 11 (FACTOR)
-
-
-State 7
-
-   13 FACTOR: T_TYPE_INT . T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
-
-    T_VARIABLE  shift, and go to state 16
-
-
-State 8
-
-    0 $accept: ROOT . $end
-
-    $end  shift, and go to state 17
-
-
-State 9
-
-    1 ROOT: EXPR .
-    2 EXPR: EXPR . T_MINUS TERM
-    3     | EXPR . T_PLUS TERM
-
-    T_PLUS   shift, and go to state 18
-    T_MINUS  shift, and go to state 19
+    1 ROOT: FUNCTION_DECLARATION .
 
     $default  reduce using rule 1 (ROOT)
 
 
-State 10
+State 4
 
-    4 EXPR: TERM .
-    5 TERM: TERM . T_TIMES UNARY
-    6     | TERM . T_DIVIDE UNARY
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE . T_LBRACKET PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET
 
-    T_TIMES   shift, and go to state 20
-    T_DIVIDE  shift, and go to state 21
-
-    $default  reduce using rule 4 (EXPR)
+    T_LBRACKET  shift, and go to state 6
 
 
-State 11
-
-    7 TERM: UNARY .
-
-    $default  reduce using rule 7 (TERM)
-
-
-State 12
-
-    9 UNARY: FACTOR . T_EXPONENT UNARY
-   10      | FACTOR .
-
-    T_EXPONENT  shift, and go to state 22
-
-    $default  reduce using rule 10 (UNARY)
-
-
-State 13
-
-   14 FACTOR: FUNCTION_NAME . T_LBRACKET EXPR T_RBRACKET
-
-    T_LBRACKET  shift, and go to state 23
-
-
-State 14
-
-    8 UNARY: T_MINUS FACTOR .
-
-    $default  reduce using rule 8 (UNARY)
-
-
-State 15
-
-    2 EXPR: EXPR . T_MINUS TERM
-    3     | EXPR . T_PLUS TERM
-   12 FACTOR: T_LBRACKET EXPR . T_RBRACKET
-
-    T_PLUS      shift, and go to state 18
-    T_MINUS     shift, and go to state 19
-    T_RBRACKET  shift, and go to state 24
-
-
-State 16
-
-   13 FACTOR: T_TYPE_INT T_VARIABLE . T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
-
-    T_LBRACKET  shift, and go to state 25
-
-
-State 17
+State 5
 
     0 $accept: ROOT $end .
 
     $default  accept
 
 
-State 18
+State 6
 
-    3 EXPR: EXPR T_PLUS . TERM
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE T_LBRACKET . PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
     T_TYPE_INT  shift, and go to state 7
 
-    TERM           go to state 26
-    UNARY          go to state 11
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    $default  reduce using rule 5 (PARAMETERLIST)
+
+    PARAMETERLIST  go to state 8
+
+
+State 7
+
+    3 PARAMETERLIST: T_TYPE_INT . T_VARIABLE
+    4              | T_TYPE_INT . T_VARIABLE T_COMMA PARAMETERLIST
+
+    T_VARIABLE  shift, and go to state 9
+
+
+State 8
+
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE T_LBRACKET PARAMETERLIST . T_RBRACKET T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET
+
+    T_RBRACKET  shift, and go to state 10
+
+
+State 9
+
+    3 PARAMETERLIST: T_TYPE_INT T_VARIABLE .
+    4              | T_TYPE_INT T_VARIABLE . T_COMMA PARAMETERLIST
+
+    T_COMMA  shift, and go to state 11
+
+    $default  reduce using rule 3 (PARAMETERLIST)
+
+
+State 10
+
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE T_LBRACKET PARAMETERLIST T_RBRACKET . T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET
+
+    T_L_CURLY_BRACKET  shift, and go to state 12
+
+
+State 11
+
+    4 PARAMETERLIST: T_TYPE_INT T_VARIABLE T_COMMA . PARAMETERLIST
+
+    T_TYPE_INT  shift, and go to state 7
+
+    $default  reduce using rule 5 (PARAMETERLIST)
+
+    PARAMETERLIST  go to state 13
+
+
+State 12
+
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE T_LBRACKET PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET . RETURN T_R_CURLY_BRACKET
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_RETURN       shift, and go to state 22
+    T_TYPE_INT     shift, and go to state 23
+
+    RETURN         go to state 24
+    LOGICOR        go to state 25
+    LOGICAND       go to state 26
+    BITWISEOR      go to state 27
+    BITWISEXOR     go to state 28
+    BITWISEAND     go to state 29
+    LOGICEQ        go to state 30
+    LOGICREL       go to state 31
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 13
+
+    4 PARAMETERLIST: T_TYPE_INT T_VARIABLE T_COMMA PARAMETERLIST .
+
+    $default  reduce using rule 4 (PARAMETERLIST)
+
+
+State 14
+
+   36 UNARY: T_MINUS . FACTOR
+
+    T_LBRACKET  shift, and go to state 17
+    T_LOG       shift, and go to state 18
+    T_EXP       shift, and go to state 19
+    T_SQRT      shift, and go to state 20
+    T_NUMBER    shift, and go to state 21
+    T_TYPE_INT  shift, and go to state 23
+
+    FACTOR         go to state 38
+    FUNCTION_NAME  go to state 37
+
+
+State 15
+
+   40 UNARY: T_NOT . FACTOR
+
+    T_LBRACKET  shift, and go to state 17
+    T_LOG       shift, and go to state 18
+    T_EXP       shift, and go to state 19
+    T_SQRT      shift, and go to state 20
+    T_NUMBER    shift, and go to state 21
+    T_TYPE_INT  shift, and go to state 23
+
+    FACTOR         go to state 39
+    FUNCTION_NAME  go to state 37
+
+
+State 16
+
+   39 UNARY: T_BITWISEFLIP . FACTOR
+
+    T_LBRACKET  shift, and go to state 17
+    T_LOG       shift, and go to state 18
+    T_EXP       shift, and go to state 19
+    T_SQRT      shift, and go to state 20
+    T_NUMBER    shift, and go to state 21
+    T_TYPE_INT  shift, and go to state 23
+
+    FACTOR         go to state 40
+    FUNCTION_NAME  go to state 37
+
+
+State 17
+
+   43 FACTOR: T_LBRACKET . EXPR T_RBRACKET
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    EXPR           go to state 41
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 18
+
+   46 FUNCTION_NAME: T_LOG .
+
+    $default  reduce using rule 46 (FUNCTION_NAME)
 
 
 State 19
 
-    2 EXPR: EXPR T_MINUS . TERM
+   47 FUNCTION_NAME: T_EXP .
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
-
-    TERM           go to state 27
-    UNARY          go to state 11
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    $default  reduce using rule 47 (FUNCTION_NAME)
 
 
 State 20
 
-    5 TERM: TERM T_TIMES . UNARY
+   48 FUNCTION_NAME: T_SQRT .
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
-
-    UNARY          go to state 28
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    $default  reduce using rule 48 (FUNCTION_NAME)
 
 
 State 21
 
-    6 TERM: TERM T_DIVIDE . UNARY
+   42 FACTOR: T_NUMBER .
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
-
-    UNARY          go to state 29
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    $default  reduce using rule 42 (FACTOR)
 
 
 State 22
 
-    9 UNARY: FACTOR T_EXPONENT . UNARY
+    6 RETURN: T_RETURN . LOGICOR
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
 
-    UNARY          go to state 30
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    LOGICOR        go to state 42
+    LOGICAND       go to state 26
+    BITWISEOR      go to state 27
+    BITWISEXOR     go to state 28
+    BITWISEAND     go to state 29
+    LOGICEQ        go to state 30
+    LOGICREL       go to state 31
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
 
 
 State 23
 
-   14 FACTOR: FUNCTION_NAME T_LBRACKET . EXPR T_RBRACKET
+   44 FACTOR: T_TYPE_INT . T_VARIABLE
 
-    T_MINUS     shift, and go to state 1
-    T_LBRACKET  shift, and go to state 2
-    T_LOG       shift, and go to state 3
-    T_EXP       shift, and go to state 4
-    T_SQRT      shift, and go to state 5
-    T_NUMBER    shift, and go to state 6
-    T_TYPE_INT  shift, and go to state 7
-
-    EXPR           go to state 31
-    TERM           go to state 10
-    UNARY          go to state 11
-    FACTOR         go to state 12
-    FUNCTION_NAME  go to state 13
+    T_VARIABLE  shift, and go to state 43
 
 
 State 24
 
-   12 FACTOR: T_LBRACKET EXPR T_RBRACKET .
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE T_LBRACKET PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET RETURN . T_R_CURLY_BRACKET
 
-    $default  reduce using rule 12 (FACTOR)
+    T_R_CURLY_BRACKET  shift, and go to state 44
 
 
 State 25
 
-   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET . T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
+    7 RETURN: LOGICOR .
+    8 LOGICOR: LOGICOR . T_OR LOGICAND
 
-    T_RBRACKET  shift, and go to state 32
+    T_OR  shift, and go to state 45
+
+    $default  reduce using rule 7 (RETURN)
 
 
 State 26
 
-    3 EXPR: EXPR T_PLUS TERM .
-    5 TERM: TERM . T_TIMES UNARY
-    6     | TERM . T_DIVIDE UNARY
+    9 LOGICOR: LOGICAND .
+   10 LOGICAND: LOGICAND . T_AND BITWISEOR
 
-    T_TIMES   shift, and go to state 20
-    T_DIVIDE  shift, and go to state 21
+    T_AND  shift, and go to state 46
 
-    $default  reduce using rule 3 (EXPR)
+    $default  reduce using rule 9 (LOGICOR)
 
 
 State 27
 
-    2 EXPR: EXPR T_MINUS TERM .
-    5 TERM: TERM . T_TIMES UNARY
-    6     | TERM . T_DIVIDE UNARY
+   11 LOGICAND: BITWISEOR .
+   12 BITWISEOR: BITWISEOR . T_BITWISEOR BITWISEXOR
 
-    T_TIMES   shift, and go to state 20
-    T_DIVIDE  shift, and go to state 21
+    T_BITWISEOR  shift, and go to state 47
 
-    $default  reduce using rule 2 (EXPR)
+    $default  reduce using rule 11 (LOGICAND)
 
 
 State 28
 
-    5 TERM: TERM T_TIMES UNARY .
+   13 BITWISEOR: BITWISEXOR .
+   14 BITWISEXOR: BITWISEXOR . T_BITWISEXOR BITWISEAND
 
-    $default  reduce using rule 5 (TERM)
+    T_BITWISEXOR  shift, and go to state 48
+
+    $default  reduce using rule 13 (BITWISEOR)
 
 
 State 29
 
-    6 TERM: TERM T_DIVIDE UNARY .
+   15 BITWISEXOR: BITWISEAND .
+   16 BITWISEAND: BITWISEAND . T_BITWISEAND LOGICEQ
 
-    $default  reduce using rule 6 (TERM)
+    T_BITWISEAND  shift, and go to state 49
+
+    $default  reduce using rule 15 (BITWISEXOR)
 
 
 State 30
 
-    9 UNARY: FACTOR T_EXPONENT UNARY .
+   17 BITWISEAND: LOGICEQ .
+   21 LOGICREL: LOGICEQ . T_GREATERTHAN BITWISESHIFT
+   22         | LOGICEQ . T_LESSTHAN BITWISESHIFT
+   23         | LOGICEQ . T_GREATERTHANEQUALS BITWISESHIFT
+   24         | LOGICEQ . T_LESSTHANEQUALS BITWISESHIFT
 
-    $default  reduce using rule 9 (UNARY)
+    T_LESSTHAN           shift, and go to state 50
+    T_GREATERTHAN        shift, and go to state 51
+    T_LESSTHANEQUALS     shift, and go to state 52
+    T_GREATERTHANEQUALS  shift, and go to state 53
+
+    $default  reduce using rule 17 (BITWISEAND)
 
 
 State 31
 
-    2 EXPR: EXPR . T_MINUS TERM
-    3     | EXPR . T_PLUS TERM
-   14 FACTOR: FUNCTION_NAME T_LBRACKET EXPR . T_RBRACKET
+   18 LOGICEQ: LOGICREL . T_EQUALS LOGICREL
+   19        | LOGICREL . T_NOTEQUALS LOGICREL
+   20        | LOGICREL .
 
-    T_PLUS      shift, and go to state 18
-    T_MINUS     shift, and go to state 19
-    T_RBRACKET  shift, and go to state 33
+    T_EQUALS     shift, and go to state 54
+    T_NOTEQUALS  shift, and go to state 55
+
+    $default  reduce using rule 20 (LOGICEQ)
 
 
 State 32
 
-   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET . T_L_CURLY_BRACKET T_R_CURLY_BRACKET
+   25 LOGICREL: BITWISESHIFT .
+   26 BITWISESHIFT: BITWISESHIFT . T_SHIFTLEFT EXPR
+   27             | BITWISESHIFT . T_SHIFTRIGHT EXPR
 
-    T_L_CURLY_BRACKET  shift, and go to state 34
+    T_SHIFTLEFT   shift, and go to state 56
+    T_SHIFTRIGHT  shift, and go to state 57
+
+    $default  reduce using rule 25 (LOGICREL)
 
 
 State 33
 
-   14 FACTOR: FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET .
+   28 BITWISESHIFT: EXPR .
+   29 EXPR: EXPR . T_MINUS TERM
+   30     | EXPR . T_PLUS TERM
 
-    $default  reduce using rule 14 (FACTOR)
+    T_PLUS   shift, and go to state 58
+    T_MINUS  shift, and go to state 59
+
+    $default  reduce using rule 28 (BITWISESHIFT)
 
 
 State 34
 
-   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET . T_R_CURLY_BRACKET
+   31 EXPR: TERM .
+   32 TERM: TERM . T_TIMES UNARY
+   33     | TERM . T_DIVIDE UNARY
+   34     | TERM . T_MOD UNARY
 
-    T_R_CURLY_BRACKET  shift, and go to state 35
+    T_TIMES   shift, and go to state 60
+    T_DIVIDE  shift, and go to state 61
+    T_MOD     shift, and go to state 62
+
+    $default  reduce using rule 31 (EXPR)
 
 
 State 35
 
-   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET .
+   35 TERM: UNARY .
 
-    $default  reduce using rule 13 (FACTOR)
+    $default  reduce using rule 35 (TERM)
+
+
+State 36
+
+   37 UNARY: FACTOR . T_INCREMENT
+   38      | FACTOR . T_DECREMENT
+   41      | FACTOR .
+
+    T_INCREMENT  shift, and go to state 63
+    T_DECREMENT  shift, and go to state 64
+
+    $default  reduce using rule 41 (UNARY)
+
+
+State 37
+
+   45 FACTOR: FUNCTION_NAME . T_LBRACKET EXPR T_RBRACKET
+
+    T_LBRACKET  shift, and go to state 65
+
+
+State 38
+
+   36 UNARY: T_MINUS FACTOR .
+
+    $default  reduce using rule 36 (UNARY)
+
+
+State 39
+
+   40 UNARY: T_NOT FACTOR .
+
+    $default  reduce using rule 40 (UNARY)
+
+
+State 40
+
+   39 UNARY: T_BITWISEFLIP FACTOR .
+
+    $default  reduce using rule 39 (UNARY)
+
+
+State 41
+
+   29 EXPR: EXPR . T_MINUS TERM
+   30     | EXPR . T_PLUS TERM
+   43 FACTOR: T_LBRACKET EXPR . T_RBRACKET
+
+    T_PLUS      shift, and go to state 58
+    T_MINUS     shift, and go to state 59
+    T_RBRACKET  shift, and go to state 66
+
+
+State 42
+
+    6 RETURN: T_RETURN LOGICOR .
+    8 LOGICOR: LOGICOR . T_OR LOGICAND
+
+    T_OR  shift, and go to state 45
+
+    $default  reduce using rule 6 (RETURN)
+
+
+State 43
+
+   44 FACTOR: T_TYPE_INT T_VARIABLE .
+
+    $default  reduce using rule 44 (FACTOR)
+
+
+State 44
+
+    2 FUNCTION_DECLARATION: T_TYPE_INT T_VARIABLE T_LBRACKET PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET .
+
+    $default  reduce using rule 2 (FUNCTION_DECLARATION)
+
+
+State 45
+
+    8 LOGICOR: LOGICOR T_OR . LOGICAND
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    LOGICAND       go to state 67
+    BITWISEOR      go to state 27
+    BITWISEXOR     go to state 28
+    BITWISEAND     go to state 29
+    LOGICEQ        go to state 30
+    LOGICREL       go to state 31
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 46
+
+   10 LOGICAND: LOGICAND T_AND . BITWISEOR
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    BITWISEOR      go to state 68
+    BITWISEXOR     go to state 28
+    BITWISEAND     go to state 29
+    LOGICEQ        go to state 30
+    LOGICREL       go to state 31
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 47
+
+   12 BITWISEOR: BITWISEOR T_BITWISEOR . BITWISEXOR
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    BITWISEXOR     go to state 69
+    BITWISEAND     go to state 29
+    LOGICEQ        go to state 30
+    LOGICREL       go to state 31
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 48
+
+   14 BITWISEXOR: BITWISEXOR T_BITWISEXOR . BITWISEAND
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    BITWISEAND     go to state 70
+    LOGICEQ        go to state 30
+    LOGICREL       go to state 31
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 49
+
+   16 BITWISEAND: BITWISEAND T_BITWISEAND . LOGICEQ
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    LOGICEQ        go to state 71
+    LOGICREL       go to state 31
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 50
+
+   22 LOGICREL: LOGICEQ T_LESSTHAN . BITWISESHIFT
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    BITWISESHIFT   go to state 72
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 51
+
+   21 LOGICREL: LOGICEQ T_GREATERTHAN . BITWISESHIFT
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    BITWISESHIFT   go to state 73
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 52
+
+   24 LOGICREL: LOGICEQ T_LESSTHANEQUALS . BITWISESHIFT
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    BITWISESHIFT   go to state 74
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 53
+
+   23 LOGICREL: LOGICEQ T_GREATERTHANEQUALS . BITWISESHIFT
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    BITWISESHIFT   go to state 75
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 54
+
+   18 LOGICEQ: LOGICREL T_EQUALS . LOGICREL
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    LOGICEQ        go to state 76
+    LOGICREL       go to state 77
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 55
+
+   19 LOGICEQ: LOGICREL T_NOTEQUALS . LOGICREL
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    LOGICEQ        go to state 76
+    LOGICREL       go to state 78
+    BITWISESHIFT   go to state 32
+    EXPR           go to state 33
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 56
+
+   26 BITWISESHIFT: BITWISESHIFT T_SHIFTLEFT . EXPR
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    EXPR           go to state 79
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 57
+
+   27 BITWISESHIFT: BITWISESHIFT T_SHIFTRIGHT . EXPR
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    EXPR           go to state 80
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 58
+
+   30 EXPR: EXPR T_PLUS . TERM
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    TERM           go to state 81
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 59
+
+   29 EXPR: EXPR T_MINUS . TERM
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    TERM           go to state 82
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 60
+
+   32 TERM: TERM T_TIMES . UNARY
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    UNARY          go to state 83
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 61
+
+   33 TERM: TERM T_DIVIDE . UNARY
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    UNARY          go to state 84
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 62
+
+   34 TERM: TERM T_MOD . UNARY
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    UNARY          go to state 85
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 63
+
+   37 UNARY: FACTOR T_INCREMENT .
+
+    $default  reduce using rule 37 (UNARY)
+
+
+State 64
+
+   38 UNARY: FACTOR T_DECREMENT .
+
+    $default  reduce using rule 38 (UNARY)
+
+
+State 65
+
+   45 FACTOR: FUNCTION_NAME T_LBRACKET . EXPR T_RBRACKET
+
+    T_MINUS        shift, and go to state 14
+    T_NOT          shift, and go to state 15
+    T_BITWISEFLIP  shift, and go to state 16
+    T_LBRACKET     shift, and go to state 17
+    T_LOG          shift, and go to state 18
+    T_EXP          shift, and go to state 19
+    T_SQRT         shift, and go to state 20
+    T_NUMBER       shift, and go to state 21
+    T_TYPE_INT     shift, and go to state 23
+
+    EXPR           go to state 86
+    TERM           go to state 34
+    UNARY          go to state 35
+    FACTOR         go to state 36
+    FUNCTION_NAME  go to state 37
+
+
+State 66
+
+   43 FACTOR: T_LBRACKET EXPR T_RBRACKET .
+
+    $default  reduce using rule 43 (FACTOR)
+
+
+State 67
+
+    8 LOGICOR: LOGICOR T_OR LOGICAND .
+   10 LOGICAND: LOGICAND . T_AND BITWISEOR
+
+    T_AND  shift, and go to state 46
+
+    $default  reduce using rule 8 (LOGICOR)
+
+
+State 68
+
+   10 LOGICAND: LOGICAND T_AND BITWISEOR .
+   12 BITWISEOR: BITWISEOR . T_BITWISEOR BITWISEXOR
+
+    T_BITWISEOR  shift, and go to state 47
+
+    $default  reduce using rule 10 (LOGICAND)
+
+
+State 69
+
+   12 BITWISEOR: BITWISEOR T_BITWISEOR BITWISEXOR .
+   14 BITWISEXOR: BITWISEXOR . T_BITWISEXOR BITWISEAND
+
+    T_BITWISEXOR  shift, and go to state 48
+
+    $default  reduce using rule 12 (BITWISEOR)
+
+
+State 70
+
+   14 BITWISEXOR: BITWISEXOR T_BITWISEXOR BITWISEAND .
+   16 BITWISEAND: BITWISEAND . T_BITWISEAND LOGICEQ
+
+    T_BITWISEAND  shift, and go to state 49
+
+    $default  reduce using rule 14 (BITWISEXOR)
+
+
+State 71
+
+   16 BITWISEAND: BITWISEAND T_BITWISEAND LOGICEQ .
+   21 LOGICREL: LOGICEQ . T_GREATERTHAN BITWISESHIFT
+   22         | LOGICEQ . T_LESSTHAN BITWISESHIFT
+   23         | LOGICEQ . T_GREATERTHANEQUALS BITWISESHIFT
+   24         | LOGICEQ . T_LESSTHANEQUALS BITWISESHIFT
+
+    T_LESSTHAN           shift, and go to state 50
+    T_GREATERTHAN        shift, and go to state 51
+    T_LESSTHANEQUALS     shift, and go to state 52
+    T_GREATERTHANEQUALS  shift, and go to state 53
+
+    $default  reduce using rule 16 (BITWISEAND)
+
+
+State 72
+
+   22 LOGICREL: LOGICEQ T_LESSTHAN BITWISESHIFT .
+   26 BITWISESHIFT: BITWISESHIFT . T_SHIFTLEFT EXPR
+   27             | BITWISESHIFT . T_SHIFTRIGHT EXPR
+
+    T_SHIFTLEFT   shift, and go to state 56
+    T_SHIFTRIGHT  shift, and go to state 57
+
+    $default  reduce using rule 22 (LOGICREL)
+
+
+State 73
+
+   21 LOGICREL: LOGICEQ T_GREATERTHAN BITWISESHIFT .
+   26 BITWISESHIFT: BITWISESHIFT . T_SHIFTLEFT EXPR
+   27             | BITWISESHIFT . T_SHIFTRIGHT EXPR
+
+    T_SHIFTLEFT   shift, and go to state 56
+    T_SHIFTRIGHT  shift, and go to state 57
+
+    $default  reduce using rule 21 (LOGICREL)
+
+
+State 74
+
+   24 LOGICREL: LOGICEQ T_LESSTHANEQUALS BITWISESHIFT .
+   26 BITWISESHIFT: BITWISESHIFT . T_SHIFTLEFT EXPR
+   27             | BITWISESHIFT . T_SHIFTRIGHT EXPR
+
+    T_SHIFTLEFT   shift, and go to state 56
+    T_SHIFTRIGHT  shift, and go to state 57
+
+    $default  reduce using rule 24 (LOGICREL)
+
+
+State 75
+
+   23 LOGICREL: LOGICEQ T_GREATERTHANEQUALS BITWISESHIFT .
+   26 BITWISESHIFT: BITWISESHIFT . T_SHIFTLEFT EXPR
+   27             | BITWISESHIFT . T_SHIFTRIGHT EXPR
+
+    T_SHIFTLEFT   shift, and go to state 56
+    T_SHIFTRIGHT  shift, and go to state 57
+
+    $default  reduce using rule 23 (LOGICREL)
+
+
+State 76
+
+   21 LOGICREL: LOGICEQ . T_GREATERTHAN BITWISESHIFT
+   22         | LOGICEQ . T_LESSTHAN BITWISESHIFT
+   23         | LOGICEQ . T_GREATERTHANEQUALS BITWISESHIFT
+   24         | LOGICEQ . T_LESSTHANEQUALS BITWISESHIFT
+
+    T_LESSTHAN           shift, and go to state 50
+    T_GREATERTHAN        shift, and go to state 51
+    T_LESSTHANEQUALS     shift, and go to state 52
+    T_GREATERTHANEQUALS  shift, and go to state 53
+
+
+State 77
+
+   18 LOGICEQ: LOGICREL . T_EQUALS LOGICREL
+   18        | LOGICREL T_EQUALS LOGICREL .
+   19        | LOGICREL . T_NOTEQUALS LOGICREL
+   20        | LOGICREL .
+
+    T_EQUALS     shift, and go to state 54
+    T_NOTEQUALS  shift, and go to state 55
+
+    T_LESSTHAN           reduce using rule 18 (LOGICEQ)
+    T_LESSTHAN           [reduce using rule 20 (LOGICEQ)]
+    T_GREATERTHAN        reduce using rule 18 (LOGICEQ)
+    T_GREATERTHAN        [reduce using rule 20 (LOGICEQ)]
+    T_LESSTHANEQUALS     reduce using rule 18 (LOGICEQ)
+    T_LESSTHANEQUALS     [reduce using rule 20 (LOGICEQ)]
+    T_GREATERTHANEQUALS  reduce using rule 18 (LOGICEQ)
+    T_GREATERTHANEQUALS  [reduce using rule 20 (LOGICEQ)]
+    $default             reduce using rule 18 (LOGICEQ)
+
+
+State 78
+
+   18 LOGICEQ: LOGICREL . T_EQUALS LOGICREL
+   19        | LOGICREL . T_NOTEQUALS LOGICREL
+   19        | LOGICREL T_NOTEQUALS LOGICREL .
+   20        | LOGICREL .
+
+    T_EQUALS     shift, and go to state 54
+    T_NOTEQUALS  shift, and go to state 55
+
+    T_LESSTHAN           reduce using rule 19 (LOGICEQ)
+    T_LESSTHAN           [reduce using rule 20 (LOGICEQ)]
+    T_GREATERTHAN        reduce using rule 19 (LOGICEQ)
+    T_GREATERTHAN        [reduce using rule 20 (LOGICEQ)]
+    T_LESSTHANEQUALS     reduce using rule 19 (LOGICEQ)
+    T_LESSTHANEQUALS     [reduce using rule 20 (LOGICEQ)]
+    T_GREATERTHANEQUALS  reduce using rule 19 (LOGICEQ)
+    T_GREATERTHANEQUALS  [reduce using rule 20 (LOGICEQ)]
+    $default             reduce using rule 19 (LOGICEQ)
+
+
+State 79
+
+   26 BITWISESHIFT: BITWISESHIFT T_SHIFTLEFT EXPR .
+   29 EXPR: EXPR . T_MINUS TERM
+   30     | EXPR . T_PLUS TERM
+
+    T_PLUS   shift, and go to state 58
+    T_MINUS  shift, and go to state 59
+
+    $default  reduce using rule 26 (BITWISESHIFT)
+
+
+State 80
+
+   27 BITWISESHIFT: BITWISESHIFT T_SHIFTRIGHT EXPR .
+   29 EXPR: EXPR . T_MINUS TERM
+   30     | EXPR . T_PLUS TERM
+
+    T_PLUS   shift, and go to state 58
+    T_MINUS  shift, and go to state 59
+
+    $default  reduce using rule 27 (BITWISESHIFT)
+
+
+State 81
+
+   30 EXPR: EXPR T_PLUS TERM .
+   32 TERM: TERM . T_TIMES UNARY
+   33     | TERM . T_DIVIDE UNARY
+   34     | TERM . T_MOD UNARY
+
+    T_TIMES   shift, and go to state 60
+    T_DIVIDE  shift, and go to state 61
+    T_MOD     shift, and go to state 62
+
+    $default  reduce using rule 30 (EXPR)
+
+
+State 82
+
+   29 EXPR: EXPR T_MINUS TERM .
+   32 TERM: TERM . T_TIMES UNARY
+   33     | TERM . T_DIVIDE UNARY
+   34     | TERM . T_MOD UNARY
+
+    T_TIMES   shift, and go to state 60
+    T_DIVIDE  shift, and go to state 61
+    T_MOD     shift, and go to state 62
+
+    $default  reduce using rule 29 (EXPR)
+
+
+State 83
+
+   32 TERM: TERM T_TIMES UNARY .
+
+    $default  reduce using rule 32 (TERM)
+
+
+State 84
+
+   33 TERM: TERM T_DIVIDE UNARY .
+
+    $default  reduce using rule 33 (TERM)
+
+
+State 85
+
+   34 TERM: TERM T_MOD UNARY .
+
+    $default  reduce using rule 34 (TERM)
+
+
+State 86
+
+   29 EXPR: EXPR . T_MINUS TERM
+   30     | EXPR . T_PLUS TERM
+   45 FACTOR: FUNCTION_NAME T_LBRACKET EXPR . T_RBRACKET
+
+    T_PLUS      shift, and go to state 58
+    T_MINUS     shift, and go to state 59
+    T_RBRACKET  shift, and go to state 87
+
+
+State 87
+
+   45 FACTOR: FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET .
+
+    $default  reduce using rule 45 (FACTOR)

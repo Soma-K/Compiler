@@ -43,18 +43,14 @@ extern int yydebug;
 #line 1 "src/parser.y" /* yacc.c:1909  */
 
   #include "ast.hpp"
-
+  #include <vector>
   #include <cassert>
 
-  extern const Expression *g_root; // A way of getting the AST out
-
-  //! This is to fix problems when generating C++
-  // We are declaring the functions provided by Flex, so
-  // that Bison generated code can call them.
+  extern const Expression *g_root; 
   int yylex(void);
   void yyerror(const char *);
 
-#line 58 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 54 "src/parser.tab.hpp" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -95,14 +91,17 @@ extern int yydebug;
     T_VARIABLE = 289,
     T_INT = 290,
     T_IDENTIFIER = 291,
-    T_TYPE_VOID = 292,
-    T_TYPE_CHAR = 293,
-    T_TYPE_INT = 294,
-    T_TYPE_LONG = 295,
-    T_TYPE_FLOAT = 296,
-    T_TYPE_DOUBLE = 297,
-    T_TYPE_SIGNED = 298,
-    T_TYPE_UNSIGNED = 299
+    T_RETURN = 292,
+    T_SEMICOLON = 293,
+    T_COMMA = 294,
+    T_TYPE_VOID = 295,
+    T_TYPE_CHAR = 296,
+    T_TYPE_INT = 297,
+    T_TYPE_LONG = 298,
+    T_TYPE_FLOAT = 299,
+    T_TYPE_DOUBLE = 300,
+    T_TYPE_SIGNED = 301,
+    T_TYPE_UNSIGNED = 302
   };
 #endif
 
@@ -111,14 +110,14 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 17 "src/parser.y" /* yacc.c:1909  */
+#line 12 "src/parser.y" /* yacc.c:1909  */
 
   const Expression *expr;
   double number;
   std::string *string;
   const Expression *node;
 
-#line 122 "src/parser.tab.hpp" /* yacc.c:1909  */
+#line 121 "src/parser.tab.hpp" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

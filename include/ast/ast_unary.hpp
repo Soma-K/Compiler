@@ -79,7 +79,7 @@ class DecrementOperator
     : public Unary
 {
 public:
-    IncrementOperator(const ExpressionPtr _expr)
+    DecrementOperator(const ExpressionPtr _expr)
         : Unary(_expr)
     {}
 
@@ -106,13 +106,7 @@ public:
     virtual const char *getOpcode() const override
     { return "~"; }
 
-    virtual double evaluate(
-        const std::map<std::string, double> &bindings
-    ) const override
-    {
-        double vl=~getExpr()->evaluate(bindings);
-        return vl;
-    }
+   
 };
 
 class NotOperator

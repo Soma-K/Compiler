@@ -10,9 +10,12 @@ class Functiondeclaration
 {
 private:
     std::string id;
+    
+    ExpressionPtr right;
 public:
-    Functiondeclaration(const std::string &_id)
+    Functiondeclaration(const std::string &_id, ExpressionPtr _right)
         : id(_id)
+        , right(_right)
     {}
 
     const std::string getId() const
@@ -26,8 +29,18 @@ public:
         dst<<"addiu   $sp,$sp,-8"<<std::endl;
         dst<<"sw      $fp,-4($sp)"<<std::endl;
         
-        dst<<"move    $fp,$sp"<<std::endl;
+        
+        right->print(dst);
+        dst<<"lw      $2, $t1"<<std::endl; //Return
+
+        dst<<"move    $sp,$fp"<<std::endl;
+        dst<<"lw      $fp,4($sp)"<<std::endl;
+        dst<<"addiu   $sp,$sp,8"<<std::endl;
+        dst<<"jr      $31"<<std::endl;
+        dst<<"nop"<<std::endl;
        
+
+
         
     }
 
@@ -35,10 +48,34 @@ public:
         const std::map<std::string,double> &bindings
     ) const override
     {
-        // TODO-B : Run bin/eval_expr with a variable binding to make sure you understand how this works.
-        // If the binding does not exist, this will throw an error
         return bindings.at(id);
     }    
+};
+
+class ReturnOp
+    : public Expression
+{
+private:
+    ExpressionPtr right;
+public:
+    ReturnOp(ExpressionPtr _right)
+        : right(_right)
+    {}
+
+
+    virtual void print(std::ostream &dst) const override
+    {
+        dst<<".global "<<std::endl;
+        dst<<":"<<std::endl;
+        
+        dst<<"addiu   $sp,$sp,-8"<<std::endl;
+        dst<<"sw      $fp,-4($sp)"<<std::endl;
+        
+        dst<<"move    $fp,$sp"<<std::endl;
+        right->print(dst);
+       
+        
+    }
 };
 
 class Function

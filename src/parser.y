@@ -1,6 +1,6 @@
 %code requires{
   #include "ast.hpp"
-
+  #include <vector>
   #include <cassert>
 
   extern const Expression *g_root; 
@@ -26,11 +26,13 @@
 %token T_NUMBER T_VARIABLE
 %token T_INT
 %token T_IDENTIFIER
+%token T_RETURN
+%token T_SEMICOLON T_COMMA
 
 %token T_TYPE_VOID T_TYPE_CHAR T_TYPE_INT T_TYPE_LONG T_TYPE_FLOAT T_TYPE_DOUBLE T_TYPE_SIGNED T_TYPE_UNSIGNED
 
 
-%type <expr> EXPR TERM UNARY FACTOR LOGICOR LOGICAND BITWISEOR BITWISEXOR BITWISEAND LOGICEQ LOGICREL BITWISESHIFT STATEMENTS
+%type <expr> EXPR TERM UNARY FACTOR LOGICOR LOGICAND BITWISEOR BITWISEXOR BITWISEAND LOGICEQ LOGICREL BITWISESHIFT RETURN PARAMETERLIST
 %type <number> T_NUMBER
 %type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME T_IDENTIFIER T_TYPE_VOID T_TYPE_CHAR T_TYPE_INT T_TYPE_LONG T_TYPE_FLOAT T_TYPE_DOUBLE T_TYPE_SIGNED T_TYPE_UNSIGNED
 %type <expr> FUNCTION_DECLARATION
@@ -47,7 +49,16 @@
 
 ROOT : FUNCTION_DECLARATION{ g_root = $1; }
 
-FUNCTION_DECLARATION : T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET LOGICOR T_R_CURLY_BRACKET { $$ = new Functiondeclaration(*$2); 
+FUNCTION_DECLARATION : T_TYPE_INT T_VARIABLE T_LBRACKET PARAMETERLIST T_RBRACKET T_L_CURLY_BRACKET RETURN T_R_CURLY_BRACKET { $$ = new Functiondeclaration(*$2, $7);} 
+
+PARAMETERLIST: T_TYPE_INT T_VARIABLE { $$ = new Variable ( *$2 ); }
+             | T_TYPE_INT T_VARIABLE T_COMMA PARAMETERLIST { $$ = new Variable( *$2 );}
+             | {$$ = NULL;}
+
+
+RETURN: T_RETURN LOGICOR  { $$ = new ReturnOp ($2);}
+      | LOGICOR { $$ = $1; }
+
 
 LOGICOR : LOGICOR T_OR LOGICAND { $$ = new OrOperator ( $1 , $3);} 
         | LOGICAND { $$ = $1; }
@@ -65,16 +76,16 @@ BITWISEXOR : BITWISEXOR T_BITWISEXOR BITWISEAND { $$ = new BitwiseXorOperator ( 
 
 
 BITWISEAND : BITWISEAND T_BITWISEAND LOGICEQ { $$ = new BitwiseAndOperator ( $1 , $3);} 
-           | T_LOGICEQ { $$ = $1; }
+           | LOGICEQ { $$ = $1; }
 
-LOGICEQ : LOGICEQ T_EQUALS LOGICREL { $$ = new EqOperator ( $1 , $3);} 
-        | LOGICEQ T_NOTEQUALS LOGICREL { $$ = new NotEqOperator ($1, $3);}
+LOGICEQ : LOGICREL T_EQUALS LOGICREL { $$ = new EqOperator ( $1 , $3);} 
+        | LOGICREL T_NOTEQUALS LOGICREL { $$ = new NotEqOperator ($1, $3);}
         | LOGICREL { $$ = $1; }
 
-LOGICREL :LOGICREL T_GREATERTHAN BITWISESHIFT { $$ = new GreaterThanOperator ( $1 , $3);} 
-        | LOGICREL T_LESSTHAN BITWISESHIFT { $$ = new LessThanOperator ( $1 , $3);} 
-        | LOGICREL T_GREATERTHANEQUALS BITWISESHIFT { $$ = new GreaterThanEqOperator ( $1 , $3);} 
-        | LOGICREL T_LESSTHANEQUALS BITWISESHIFT { $$ = new LessThanEqOperator ( $1 , $3);} 
+LOGICREL :LOGICEQ T_GREATERTHAN BITWISESHIFT { $$ = new GreaterThanOperator ( $1 , $3);} 
+        | LOGICEQ T_LESSTHAN BITWISESHIFT { $$ = new LessThanOperator ( $1 , $3);} 
+        | LOGICEQ T_GREATERTHANEQUALS BITWISESHIFT { $$ = new GreaterThanEqOperator ( $1 , $3);} 
+        | LOGICEQ T_LESSTHANEQUALS BITWISESHIFT { $$ = new LessThanEqOperator ( $1 , $3);} 
         | BITWISESHIFT { $$ = $1; }
 
 

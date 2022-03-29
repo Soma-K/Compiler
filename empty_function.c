@@ -1,4 +1,3 @@
-int main(){
-3 + 2
-
+int main(int x, int y){
+3+3;
 }
