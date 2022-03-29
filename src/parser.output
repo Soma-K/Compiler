@@ -23,13 +23,10 @@ Terminals unused in grammar
    T_BITWISEFLIP
    T_SHIFTLEFT
    T_SHIFTRIGHT
-   T_L_CURLY_BRACKET
-   T_R_CURLY_BRACKET
    T_INT
    T_IDENTIFIER
    T_TYPE_VOID
    T_TYPE_CHAR
-   T_TYPE_INT
    T_TYPE_LONG
    T_TYPE_FLOAT
    T_TYPE_DOUBLE
@@ -57,7 +54,7 @@ Grammar
 
    11 FACTOR: T_NUMBER
    12       | T_LBRACKET EXPR T_RBRACKET
-   13       | T_VARIABLE
+   13       | T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
    14       | FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET
 
    15 FUNCTION_NAME: T_LOG
@@ -92,10 +89,10 @@ T_BITWISEXOR (277)
 T_BITWISEFLIP (278)
 T_SHIFTLEFT (279)
 T_SHIFTRIGHT (280)
-T_LBRACKET (281) 12 14
-T_RBRACKET (282) 12 14
-T_L_CURLY_BRACKET (283)
-T_R_CURLY_BRACKET (284)
+T_LBRACKET (281) 12 13 14
+T_RBRACKET (282) 12 13 14
+T_L_CURLY_BRACKET (283) 13
+T_R_CURLY_BRACKET (284) 13
 T_LOG (285) 15
 T_EXP (286) 16
 T_SQRT (287) 17
@@ -105,7 +102,7 @@ T_INT (290)
 T_IDENTIFIER (291)
 T_TYPE_VOID (292)
 T_TYPE_CHAR (293)
-T_TYPE_INT (294)
+T_TYPE_INT (294) 13
 T_TYPE_LONG (295)
 T_TYPE_FLOAT (296)
 T_TYPE_DOUBLE (297)
@@ -141,7 +138,7 @@ State 0
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
     ROOT           go to state 8
     EXPR           go to state 9
@@ -160,7 +157,7 @@ State 1
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
     FACTOR         go to state 14
     FUNCTION_NAME  go to state 13
@@ -176,7 +173,7 @@ State 2
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
     EXPR           go to state 15
     TERM           go to state 10
@@ -215,16 +212,16 @@ State 6
 
 State 7
 
-   13 FACTOR: T_VARIABLE .
+   13 FACTOR: T_TYPE_INT . T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
 
-    $default  reduce using rule 13 (FACTOR)
+    T_VARIABLE  shift, and go to state 16
 
 
 State 8
 
     0 $accept: ROOT . $end
 
-    $end  shift, and go to state 16
+    $end  shift, and go to state 17
 
 
 State 9
@@ -233,8 +230,8 @@ State 9
     2 EXPR: EXPR . T_MINUS TERM
     3     | EXPR . T_PLUS TERM
 
-    T_PLUS   shift, and go to state 17
-    T_MINUS  shift, and go to state 18
+    T_PLUS   shift, and go to state 18
+    T_MINUS  shift, and go to state 19
 
     $default  reduce using rule 1 (ROOT)
 
@@ -245,8 +242,8 @@ State 10
     5 TERM: TERM . T_TIMES UNARY
     6     | TERM . T_DIVIDE UNARY
 
-    T_TIMES   shift, and go to state 19
-    T_DIVIDE  shift, and go to state 20
+    T_TIMES   shift, and go to state 20
+    T_DIVIDE  shift, and go to state 21
 
     $default  reduce using rule 4 (EXPR)
 
@@ -263,7 +260,7 @@ State 12
     9 UNARY: FACTOR . T_EXPONENT UNARY
    10      | FACTOR .
 
-    T_EXPONENT  shift, and go to state 21
+    T_EXPONENT  shift, and go to state 22
 
     $default  reduce using rule 10 (UNARY)
 
@@ -272,7 +269,7 @@ State 13
 
    14 FACTOR: FUNCTION_NAME . T_LBRACKET EXPR T_RBRACKET
 
-    T_LBRACKET  shift, and go to state 22
+    T_LBRACKET  shift, and go to state 23
 
 
 State 14
@@ -288,19 +285,26 @@ State 15
     3     | EXPR . T_PLUS TERM
    12 FACTOR: T_LBRACKET EXPR . T_RBRACKET
 
-    T_PLUS      shift, and go to state 17
-    T_MINUS     shift, and go to state 18
-    T_RBRACKET  shift, and go to state 23
+    T_PLUS      shift, and go to state 18
+    T_MINUS     shift, and go to state 19
+    T_RBRACKET  shift, and go to state 24
 
 
 State 16
+
+   13 FACTOR: T_TYPE_INT T_VARIABLE . T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
+
+    T_LBRACKET  shift, and go to state 25
+
+
+State 17
 
     0 $accept: ROOT $end .
 
     $default  accept
 
 
-State 17
+State 18
 
     3 EXPR: EXPR T_PLUS . TERM
 
@@ -310,15 +314,15 @@ State 17
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
-    TERM           go to state 24
+    TERM           go to state 26
     UNARY          go to state 11
     FACTOR         go to state 12
     FUNCTION_NAME  go to state 13
 
 
-State 18
+State 19
 
     2 EXPR: EXPR T_MINUS . TERM
 
@@ -328,15 +332,15 @@ State 18
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
-    TERM           go to state 25
+    TERM           go to state 27
     UNARY          go to state 11
     FACTOR         go to state 12
     FUNCTION_NAME  go to state 13
 
 
-State 19
+State 20
 
     5 TERM: TERM T_TIMES . UNARY
 
@@ -346,14 +350,14 @@ State 19
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
-    UNARY          go to state 26
+    UNARY          go to state 28
     FACTOR         go to state 12
     FUNCTION_NAME  go to state 13
 
 
-State 20
+State 21
 
     6 TERM: TERM T_DIVIDE . UNARY
 
@@ -363,14 +367,14 @@ State 20
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
-    UNARY          go to state 27
+    UNARY          go to state 29
     FACTOR         go to state 12
     FUNCTION_NAME  go to state 13
 
 
-State 21
+State 22
 
     9 UNARY: FACTOR T_EXPONENT . UNARY
 
@@ -380,14 +384,14 @@ State 21
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
-    UNARY          go to state 28
+    UNARY          go to state 30
     FACTOR         go to state 12
     FUNCTION_NAME  go to state 13
 
 
-State 22
+State 23
 
    14 FACTOR: FUNCTION_NAME T_LBRACKET . EXPR T_RBRACKET
 
@@ -397,80 +401,108 @@ State 22
     T_EXP       shift, and go to state 4
     T_SQRT      shift, and go to state 5
     T_NUMBER    shift, and go to state 6
-    T_VARIABLE  shift, and go to state 7
+    T_TYPE_INT  shift, and go to state 7
 
-    EXPR           go to state 29
+    EXPR           go to state 31
     TERM           go to state 10
     UNARY          go to state 11
     FACTOR         go to state 12
     FUNCTION_NAME  go to state 13
 
 
-State 23
+State 24
 
    12 FACTOR: T_LBRACKET EXPR T_RBRACKET .
 
     $default  reduce using rule 12 (FACTOR)
 
 
-State 24
+State 25
+
+   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET . T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET
+
+    T_RBRACKET  shift, and go to state 32
+
+
+State 26
 
     3 EXPR: EXPR T_PLUS TERM .
     5 TERM: TERM . T_TIMES UNARY
     6     | TERM . T_DIVIDE UNARY
 
-    T_TIMES   shift, and go to state 19
-    T_DIVIDE  shift, and go to state 20
+    T_TIMES   shift, and go to state 20
+    T_DIVIDE  shift, and go to state 21
 
     $default  reduce using rule 3 (EXPR)
 
 
-State 25
+State 27
 
     2 EXPR: EXPR T_MINUS TERM .
     5 TERM: TERM . T_TIMES UNARY
     6     | TERM . T_DIVIDE UNARY
 
-    T_TIMES   shift, and go to state 19
-    T_DIVIDE  shift, and go to state 20
+    T_TIMES   shift, and go to state 20
+    T_DIVIDE  shift, and go to state 21
 
     $default  reduce using rule 2 (EXPR)
 
 
-State 26
+State 28
 
     5 TERM: TERM T_TIMES UNARY .
 
     $default  reduce using rule 5 (TERM)
 
 
-State 27
+State 29
 
     6 TERM: TERM T_DIVIDE UNARY .
 
     $default  reduce using rule 6 (TERM)
 
 
-State 28
+State 30
 
     9 UNARY: FACTOR T_EXPONENT UNARY .
 
     $default  reduce using rule 9 (UNARY)
 
 
-State 29
+State 31
 
     2 EXPR: EXPR . T_MINUS TERM
     3     | EXPR . T_PLUS TERM
    14 FACTOR: FUNCTION_NAME T_LBRACKET EXPR . T_RBRACKET
 
-    T_PLUS      shift, and go to state 17
-    T_MINUS     shift, and go to state 18
-    T_RBRACKET  shift, and go to state 30
+    T_PLUS      shift, and go to state 18
+    T_MINUS     shift, and go to state 19
+    T_RBRACKET  shift, and go to state 33
 
 
-State 30
+State 32
+
+   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET . T_L_CURLY_BRACKET T_R_CURLY_BRACKET
+
+    T_L_CURLY_BRACKET  shift, and go to state 34
+
+
+State 33
 
    14 FACTOR: FUNCTION_NAME T_LBRACKET EXPR T_RBRACKET .
 
     $default  reduce using rule 14 (FACTOR)
+
+
+State 34
+
+   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET . T_R_CURLY_BRACKET
+
+    T_R_CURLY_BRACKET  shift, and go to state 35
+
+
+State 35
+
+   13 FACTOR: T_TYPE_INT T_VARIABLE T_LBRACKET T_RBRACKET T_L_CURLY_BRACKET T_R_CURLY_BRACKET .
+
+    $default  reduce using rule 13 (FACTOR)
