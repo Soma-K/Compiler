@@ -36,8 +36,6 @@
 %type <number> T_NUMBER
 %type <string> T_VARIABLE T_LOG T_EXP T_SQRT FUNCTION_NAME T_IDENTIFIER T_TYPE_VOID T_TYPE_CHAR T_TYPE_INT T_TYPE_LONG T_TYPE_FLOAT T_TYPE_DOUBLE T_TYPE_SIGNED T_TYPE_UNSIGNED
 %type <expr> FUNCTION_DECLARATION
-//%type <declaration_node> declaration parameter_declaration
-//%type <declaration_list_vector> declaration_list parameter_list
 
 
 
@@ -133,7 +131,7 @@ FUNCTION_NAME : T_LOG { $$ = new std::string("log"); }
 
 %%
 
-const Expression *g_root; // Definition of variable (to match declaration earlier)
+const Expression *g_root; 
 
 const Expression *parseAST()
 {
