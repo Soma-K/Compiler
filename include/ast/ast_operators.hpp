@@ -133,27 +133,6 @@ public:
     }
 };
 
-class ExpOperator
-    : public Operator
-{
-protected:
-    virtual const char *getOpcode() const override
-    { return "^"; }
-public:
-    ExpOperator(ExpressionPtr _left, ExpressionPtr _right)
-        : Operator(_left, _right)
-    {}
-
-    virtual double evaluate(
-        const std::map<std::string,double> &bindings
-    ) const override
-    {
-        //throw std::runtime_error("ExpOperator::evaluate is not implemented.");
-        double vl=getLeft()->evaluate(bindings);
-        double vr=getRight()->evaluate(bindings);
-        return pow(vl,vr);
-    }
-};
 
 
 #endif
