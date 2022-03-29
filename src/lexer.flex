@@ -24,7 +24,7 @@ extern "C" int fileno(FILE *stream);
 
 [*]             { return T_TIMES; }
 [+]             { return T_PLUS; }
-[\^]            { return T_EXPONENT; }
+[\^]            { return T_BITWISEXOR; }
 [-]             { return T_MINUS; }
 [/]             { return T_DIVIDE; }
 
